@@ -60,5 +60,26 @@ pie3D(types_df$value, labels = types_df$labels, main = "Types of people", explod
 plot(tapply(df_na$Likelihood_Recommend_H, df_na$Likelihood_Recommend_H, sum))
 # this shows that most of the people are having a high NPS score. Now to convert the detractors to promoters
 
+library(sqldf)
+# creating separaet dfs for detractors and promoters to analyze trends
+df_negative <- sqldf('SELECT * from df where NPS_Type == "Detractor"')
+nrow(df_negative)
+View(df_negative)
 
+df_positive <- sqldf('SELECT * from df where NPS_Type == "Promoter"')
+nrow(df_positive)
+View(df_positive)
 
+df_neutral <- sqldf('SELECT * from df where NPS_Type == "Passive"')
+
+len_of_stay_neg <- tapply(df_negative$LENGTH_OF_STAY_C, df_negative$LENGTH_OF_STAY_C, sum)
+len_of_stay_neg
+ggplot(df_negative) + aes(x=LENGTH_OF_STAY_C) + geom_histogram(color="black", fill="pink")
+ggplot(df_positive) + aes(x=LENGTH_OF_STAY_C) + geom_histogram(color="black", fill="green")
+ggplot(df_neutral) + aes(x=LENGTH_OF_STAY_C) + geom_histogram(color="black", fill="orange")
+# Length of stay has not affected the promoters or negative people
+
+# Purpose of trip relation with NPS-type
+tapply(df_negative$POV_CODE_C, df_negative$POV_CODE_C,length)
+tapply(df_positive$POV_CODE_C, df_positive$POV_CODE_C,length)
+# no significant relation
