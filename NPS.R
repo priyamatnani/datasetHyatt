@@ -43,5 +43,22 @@ ncol(df)
 complete_cases <- complete.cases(df[,"Likelihood_Recommend_H"])
 df_na <- df[complete_cases,]
 nrow(df_na)
-
 View(df_na)
+
+library(ggplot2)
+install.packages('plotrix')
+library(plotrix)
+
+# % of people - promoters/ detractors
+types_count <- tapply(df_na$NPS_Type, df_na$NPS_Type, length)
+types_df <- data.frame(c("Detractor","Passive","Promoter"), c(types_count["Detractor"], types_count["Passive"], types_count["Promoter"]))
+colnames(types_df) <- c("labels","value")
+types_df
+rownames(types_df) <- NULL
+pie3D(types_df$value, labels = types_df$labels, main = "Types of people", explode=0.1, radius=.9, labelcex = 1.2,  start=0.7)
+
+plot(tapply(df_na$Likelihood_Recommend_H, df_na$Likelihood_Recommend_H, sum))
+# this shows that most of the people are having a high NPS score. Now to convert the detractors to promoters
+
+
+
