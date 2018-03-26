@@ -1,6 +1,7 @@
 
-df <- read.csv(file='Desktop/IST687-data/out-201402.csv', header=TRUE, sep=',')
-df <- read.csv(file='Desktop/IST687-data/out-201412.csv', header=TRUE, sep=',')
+#df <- read.csv(file='../data/out-201402.csv', header=TRUE, sep=',')
+setwd("~/Projects/Hyatt/code")
+df <- read.csv(file='../data/out-201412.csv', header=TRUE, sep=',')
 
 View(df)
 colnames(df)
@@ -35,8 +36,12 @@ drops_col <- c("LAST_CHANGE_DATE_R","STATE_R","COUNTRY_CODE_R","ETA_R","QUOTED_R
 df <- df [,!(names(df) %in% drops_col)]
 ncol(df)
 
+View(df)
+ncol(df)
 
-df_Mar <- read.csv("Desktop/IST687-data/out-201403.csv",  header = TRUE, sep=",")
-View(df_Mar)
-ncol(df_Mar)
-head(df_Mar)
+# remove all rows with na in classifier - liklihood to recommend
+complete_cases <- complete.cases(df[,"Likelihood_Recommend_H"])
+df_na <- df[complete_cases,]
+nrow(df_na)
+
+View(df_na)
